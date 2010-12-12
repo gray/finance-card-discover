@@ -1,4 +1,7 @@
 Revision history for Finance-Card-Discover
 
+0.02  Sun Dec 12 22:54:23 UTC 2010
+    - Added soan_transactions method.
+
 0.01  Sun Dec 12 11:59:50 UTC 2010
     - Initial distribution.
