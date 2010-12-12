@@ -5,7 +5,7 @@ use warnings;
 
 use DateTime::Tiny;
 use Object::Tiny qw(
-    account amount authcode city date expiration merchant number reference
+    account amount authcode city date expiration merchant reference soan
     state
 );
 
@@ -31,7 +31,7 @@ sub new {
         date       => $date,
         expiration => $expiration,
         merchant   => $data->{"merchantname${num}"},
-        number     => $data->{"ocode${num}"},
+        soan       => $data->{"ocode${num}"},
         reference  => $data->{"refnumber${num}"},
         state      => $data->{"state${num}"},
     }, $class;
