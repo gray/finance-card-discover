@@ -132,7 +132,7 @@ Finance::Card::Discover - DiscoverCard account information and SOAN creation
             my $date     = $transaction->date;
             my $merchant = $transaction->merchant;
             my $amount   = $transaction->amount;
-            printf "transaction: %s %s %s\n", $date $amount, $merchant;
+            printf "transaction: %s %s %s\n", $date, $amount, $merchant;
         }
     }
 
