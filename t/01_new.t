@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use Test::More tests => 4;
 use Finance::Card::Discover;
+use Finance::Card::Discover::Account;
 
 new_ok(
     'Finance::Card::Discover' => [
@@ -22,4 +23,6 @@ new_ok(
 }
 
 can_ok('Finance::Card::Discover', qw(accounts response ua));
-can_ok('Finance::Card::Discover::Account', qw(profile soan));
+can_ok('Finance::Card::Discover::Account', qw(
+    profile soan soan_transactions
+));
