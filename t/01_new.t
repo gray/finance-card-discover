@@ -1,0 +1,25 @@
+use strict;
+use warnings;
+use Test::More tests => 4;
+use Finance::Card::Discover;
+
+new_ok(
+    'Finance::Card::Discover' => [
+        username => 'Your username',
+        password => 'Your Password'
+    ]
+);
+
+{
+    local $@;
+    eval {
+        my $card = Finance::Card::Discover->new(debug => 1);
+    };
+    like(
+        $@, qr/^'username' and 'password' are required/,
+        'username/password are required'
+    );
+}
+
+can_ok('Finance::Card::Discover', qw(accounts response ua));
+can_ok('Finance::Card::Discover::Account', qw(profile soan));
