@@ -7,8 +7,6 @@ use Carp qw(croak);
 use LWP::UserAgent;
 use URI;
 
-use Finance::Card::Discover::Account;
-
 our $VERSION = '0.01';
 $VERSION = eval $VERSION;
 
@@ -55,8 +53,9 @@ sub accounts {
         msgnumber => -1,
         request    => 'getcards',
     );
-    return unless $data;
+    return unless $data and $data->{Total};
 
+    require Finance::Card::Discover::Account;
     return map {
         Finance::Card::Discover::Account->new($data, $_, card => $self)
     } (1 .. $data->{Total});
@@ -112,16 +111,28 @@ Finance::Card::Discover - DiscoverCard account information and SOAN creation
         password => 'Your Password',
     );
 
-    my @accounts = $card->accounts;
-    for my $account (@accounts) {
+    for my $account ($card->accounts) {
         my $number     = $account->number;
         my $expiration = $account->expiration;
+        printf "account: %s %s\n", $number, $expiration;
 
         my $profile = $account->profile;
 
-        if (my $soan   = $account->soan) {
+        if (my $soan = $account->soan) {
             my $number = $soan->number;
             my $cid    = $soan->cid;
+            printf "soan: %s %s\n", $number, $cid;
+        }
+        else {
+            # SOAN request failed, see why.
+            croak $account->card->response->dump;
+        }
+
+        for my $transaction ($account->soan_transactions) {
+            my $date     = $transaction->date;
+            my $merchant = $transaction->merchant;
+            my $amount   = $transaction->amount;
+            printf "transaction: %s %s %s\n", $date $amount, $merchant;
         }
     }
 

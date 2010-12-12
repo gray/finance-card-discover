@@ -27,7 +27,7 @@ __END__
 
 =head1 NAME
 
-Finance::Card::Discover::SOAN
+Finance::Card::Discover::Account::SOAN
 
 =head1 DESCRIPTION
 

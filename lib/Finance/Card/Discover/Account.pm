@@ -8,19 +8,17 @@ use Object::Tiny qw(
     card credit expiration id nickname number type
 );
 
-use Finance::Card::Discover::Account::Profile;
-use Finance::Card::Discover::Account::SOAN;
-
 sub new {
     my ($class, $data, $num, %params) = @_;
 
     my ($year, $month) = split '/', $data->{"expiry${num}"}, 2;
     $year += 2000 if 2000 > $year;
+    my $expiration = DateTime::Tiny->new(year => $year, month => $month);
 
     return bless {
         card       => $params{card},
         credit     => $data->{"AccountOpenToBuy${num}"},
-        expiration => DateTime::Tiny->new(year => $year, month => $month),
+        expiration => $expiration,
         id         => $data->{"cardsubid${num}"},
         nickname   => $data->{"nickname$num"},
         number     => $data->{"pan${num}"},
@@ -39,6 +37,8 @@ sub profile {
         request     => 'getprofile',
     );
     return unless $data;
+
+    require Finance::Card::Discover::Account::Profile;
     return Finance::Card::Discover::Account::Profile->new(
         $data, account => $self
     );
@@ -51,8 +51,8 @@ sub soan {
         cardsubid  => $self->id,
         cardtype   => $self->type,
         clienttype => 'thin',
-        cpntype    => 'MA',
-        latched    => 'Y',
+        cpntype    => 'MA',  # ?
+        latched    => 'Y',   # ?
         msgnumber  => 2,
         request    => 'ocode',
 
@@ -62,9 +62,35 @@ sub soan {
         validfor   => undef,
     );
     return unless $data;
+
+    require Finance::Card::Discover::Account::SOAN;
     return Finance::Card::Discover::Account::SOAN->new(
         $data, account => $self
     );
+}
+
+sub soan_transactions {
+    my ($self) = @_;
+
+    my $data = $self->card->_request(
+        cardtype  => $self->type,
+        cardsubid => $self->id,
+        msgnumber => 1,
+        request   => 'ocodereview',
+
+        # These might be useful.
+        maxtrans => undef,
+        fromdate => undef,
+        todate   => undef,
+    );
+    return unless $data and $data->{Total};
+
+    require Finance::Card::Discover::Account::SOAN::Transaction;
+    return map {
+        Finance::Card::Discover::Account::SOAN::Transaction->new(
+            $data, $_, soan => $self
+        );
+    } (1 .. $data->{Total});
 }
 
 
@@ -108,12 +134,23 @@ The account number.
 
 =head2 profile
 
+    $profile = $account->profile()
+
 Requests profile data for the account and returns
 a L<Finance::Card::Discover::Account::Profile> object.
 
 =head2 soan
 
+    $soan = $account->soan()
+
 Requests a new Secure Online Account Number and returns
 a L<Finance::Card::Discover::Account::SOAN> object.
+
+=head2 soan_transactions
+
+    @transactions = $account->transactions()
+
+Requests the last 50 transactions made with SOANs and returns a list of
+L<Finance::Card::Discover::Account::SOAN::Transaction> objects.
 
 =cut
