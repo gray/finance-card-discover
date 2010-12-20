@@ -1,5 +1,8 @@
 Revision history for Finance-Card-Discover
 
+0.03  Mon Dec 20 01:59:00 UTC 2010
+    - Added new methods to request account balance and transactions.
+
 0.02  Sun Dec 12 22:54:23 UTC 2010
     - Added soan_transactions method.
 
