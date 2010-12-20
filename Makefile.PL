@@ -18,6 +18,7 @@ my %conf = (
         'LWP::UserAgent' => 0,
         'Object::Tiny'   => 0,
         'URI'            => 1.36,
+        'XML::LibXML'    => 0,
         @prereq
     },
     BUILD_REQUIRES => {

@@ -24,5 +24,5 @@ new_ok(
 
 can_ok('Finance::Card::Discover', qw(accounts response ua));
 can_ok('Finance::Card::Discover::Account', qw(
-    profile soan soan_transactions
+    balance profile soan soan_transactions transactions
 ));

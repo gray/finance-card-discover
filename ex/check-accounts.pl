@@ -11,14 +11,18 @@ my $card = Finance::Card::Discover->new(
 for my $account ($card->accounts) {
     my $number     = $account->number;
     my $expiration = $account->expiration;
-    printf "account: %s %s\n", $number, $expiration;
+    print "account: $number $expiration %s\n";
 
+    my $balance = $account->balance;
+    print "balance: $balance\n";
     my $profile = $account->profile;
+
+    my @transactions = $account->transactions;
 
     if (my $soan = $account->soan) {
         my $number = $soan->number;
         my $cid    = $soan->cid;
-        printf "soan: %s %s\n", $number, $cid;
+        print "soan: $number $cid\n";
     }
     else {
         # SOAN request failed, see why.
@@ -29,7 +33,6 @@ for my $account ($card->accounts) {
         my $date     = $transaction->date;
         my $merchant = $transaction->merchant;
         my $amount   = $transaction->amount;
-        printf "transaction: %s %s %s\n", $date, $amount, $merchant;
+        printf "transaction: $date $amount $merchant\n";
     }
 }
-
