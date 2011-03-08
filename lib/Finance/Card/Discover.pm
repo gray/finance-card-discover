@@ -39,6 +39,7 @@ sub ua {
     if ($ua) {
         croak q('ua' must be (or derived from) an LWP::UserAgent')
             unless ref $ua and $ua->isa(q(LWP::UserAgent));
+        $ua->ssl_opts(verify_hostname => 0) if $ua->can('ssl_opts');
         $self->{ua} = $ua;
     }
     return $self->{ua};
