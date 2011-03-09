@@ -1,5 +1,9 @@
 Revision history for Finance-Card-Discover
 
+0.04  Tue Mar  8 23:58:16 UTC 2011
+    - Updated LWP usage to accomodate a change to the default behaviour
+      (HTTPS requests now verify the hostname matches the issued certificate).
+
 0.03  Mon Dec 20 01:59:00 UTC 2010
     - Added new methods to request account balance and transactions.
 
