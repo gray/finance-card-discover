@@ -1,5 +1,8 @@
 Revision history for Finance-Card-Discover
 
+0.05  Tue Mar 29 23:38:41 UTC 2011
+    - Required newer LWP with better HTTPS support.
+
 0.04  Tue Mar  8 23:58:16 UTC 2011
     - Updated LWP usage to accomodate a change to the default behaviour
       (HTTPS requests now verify the hostname matches the issued certificate).
