@@ -2,11 +2,6 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
-my @prereq;
-unless (eval { require IO::Socket::SSL; 1 }) {
-    push @prereq, 'Crypt::SSLeay' => 0;
-}
-
 my %conf = (
     NAME           => 'Finance::Card::Discover',
     AUTHOR         => 'gray <gray@cpan.org>',
@@ -14,12 +9,12 @@ my %conf = (
     VERSION_FROM   => 'lib/Finance/Card/Discover.pm',
     ABSTRACT_FROM  => 'lib/Finance/Card/Discover.pm',
     PREREQ_PM => {
-        'DateTime::Tiny' => 0,
-        'LWP::UserAgent' => 0,
-        'Object::Tiny'   => 0,
-        'URI'            => 1.36,
-        'XML::LibXML'    => 0,
-        @prereq
+        'DateTime::Tiny'       => 0,
+        'LWP::Protocol::https' => 6.02,
+        'LWP::UserAgent'       => 6.02,
+        'Object::Tiny'         => 0,
+        'URI'                  => 1.36,
+        'XML::LibXML'          => 0,
     },
     BUILD_REQUIRES => {
         'Test::More' => 0.82,

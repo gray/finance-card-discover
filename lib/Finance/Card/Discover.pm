@@ -39,7 +39,6 @@ sub ua {
     if ($ua) {
         croak q('ua' must be (or derived from) an LWP::UserAgent')
             unless ref $ua and $ua->isa(q(LWP::UserAgent));
-        $ua->ssl_opts(verify_hostname => 0) if $ua->can('ssl_opts');
         $self->{ua} = $ua;
     }
     return $self->{ua};
@@ -78,10 +77,7 @@ sub _request {
         @params,
     );
 
-    my $res = $self->{response} = $self->ua->post(
-        $uri,
-        if_ssl_cert_subject => "/CN=(?i)\Q@{[$uri->host]}\E\$",
-    );
+    my $res = $self->{response} = $self->ua->post($uri);
     return unless $res->is_success;
 
     # The response content is a url-encoded string.
