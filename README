@@ -17,8 +17,8 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-    Crypt::SSLeay or IO::Socket::SSL
     DateTime::Tiny
+    LWP::Protocol::https
     LWP::UserAgent
     Object;:Tiny
     Test::More
