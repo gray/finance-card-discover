@@ -116,7 +116,6 @@ sub _ofx_request {
     my $uri = URI->new('https://ofx.discovercard.com/');
     my $res = $self->card->{response} = $ua->post(
         $uri,
-        if_ssl_cert_subject => "/CN=(?i)\Q@{[$uri->host]}\E\$",
         content_type        => 'application/x-ofx',
         content             => $xml,
     );
